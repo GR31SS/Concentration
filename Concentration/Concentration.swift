@@ -10,12 +10,13 @@ import Foundation
 
 class Concentration {
     
-    var cards = [Card]()
+    private(set) var cards = [Card]()
     
     var score = 0
     var flipCount = 0
+    
     // Computed Property
-    var indexOfOneAndOnlyFaceUpCard: Int? {
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             var foundIndex: Int?
             for index in cards.indices {
@@ -35,7 +36,8 @@ class Concentration {
             }
         }
     }
-    var previouslyFlippedCard = [Int]()
+    
+    private var previouslyFlippedCard = [Int]()
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {

@@ -10,24 +10,24 @@ import UIKit
 
 class ViewController: UIViewController
 {
-    lazy var game = Concentration(numberOfPairsOfCards: numbersOfPairsOfCards)
+    private lazy var game = Concentration(numberOfPairsOfCards: numbersOfPairsOfCards)
     
     var numbersOfPairsOfCards: Int {
         // Read Only Property
             return (cardButtons.count + 1) / 2
     }
     
-    var flipCount = 0 { didSet { flipCountLabel.text = "Flips: \(flipCount)" } }
+    private(set) var flipCount = 0 { didSet { flipCountLabel.text = "Flips: \(flipCount)" } }
     
-    var scoreCount = 0 {didSet {scoreLabel.text = "Score:  \(scoreCount)" } }
+    private(set) var scoreCount = 0 {didSet {scoreLabel.text = "Score:  \(scoreCount)" } }
 
-    @IBOutlet var cardButtons: [UIButton]!
+    @IBOutlet private var cardButtons: [UIButton]!
     
-    @IBOutlet weak var flipCountLabel: UILabel!
+    @IBOutlet private weak var flipCountLabel: UILabel!
     
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet private weak var scoreLabel: UILabel!
     
-    @IBAction func newGameButton(_ sender: UIButton) {
+    @IBAction private func newGameButton(_ sender: UIButton) {
         self.refreshView()
     }
     
@@ -36,15 +36,13 @@ class ViewController: UIViewController
         refreshView()
     }
     
-    func refreshView() {
-        flipCount = 0
-        scoreCount = 0
+    private func refreshView() {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
         updateViewFromModel()
         setTheme()
     }
 
-    @IBAction func touchCard(_ sender: UIButton) {
+    @IBAction private func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -53,7 +51,7 @@ class ViewController: UIViewController
         }
     }
     
-    func updateViewFromModel() {
+    private func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
@@ -78,10 +76,10 @@ class ViewController: UIViewController
         5: ["🇨🇦","🇧🇪","🇬🇧","🇺🇸","🇹🇷","🇪🇺","🇦🇺","🇫🇷","🇯🇵"],
     ]
     
-    var emojiChoices = [String]()
-    var emoji = [Int: String]()
+    private var emojiChoices = [String]()
+    private var emoji = [Int: String]()
     
-    func setTheme() {
+    private func setTheme() {
         let theme = Int(arc4random_uniform(UInt32(emojiThemes.keys.count)))
         if let selectedTheme = emojiThemes[theme] {
             emojiChoices = selectedTheme
@@ -90,7 +88,7 @@ class ViewController: UIViewController
         }
     }
     
-    func emoji(for card: Card) -> String {
+    private func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {
             let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count - 1)))
             emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
