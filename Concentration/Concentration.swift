@@ -40,6 +40,8 @@ class Concentration {
     private var previouslyFlippedCard = [Int]()
     
     func chooseCard(at index: Int) {
+        // Crashes program if index not correct
+        assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not in cards")
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
@@ -65,6 +67,8 @@ class Concentration {
     }
     
     init(numberOfPairsOfCards: Int) {
+        // Crashes program if 0 pairs of cards are detected
+        assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)): You must have at least one pair of cards.")
         var standardDeck = [Card]()
         for _ in 0..<numberOfPairsOfCards {
             let card = Card()
