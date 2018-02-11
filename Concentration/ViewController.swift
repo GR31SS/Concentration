@@ -26,15 +26,20 @@ class ViewController: UIViewController
         self.refreshView()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        refreshView()
+    }
+    
     func refreshView() {
         flipCount = 0
         scoreCount = 0
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
         updateViewFromModel()
+        setTheme()
     }
 
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.index(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -56,11 +61,29 @@ class ViewController: UIViewController
             }
         }
         scoreCount = game.score
+        flipCount = game.flipCount
     }
     
-    var emojiChoices = ["🦇","😱","🙀","😈","🎃","👻","🍭","🍬","🍎"]
+    private let emojiThemes = [
+        0: ["🦇","😱","🙀","😈","🎃","👻","🍭","🍬","🍎"],
+        1: ["🍑","🍉","🍌","🍍","🥥","🥝","🍒","🍐","🍅"],
+        2: ["🏏","🏑","🏓","🥊","🏀","⚽️","🏈","🏹","⛳️"],
+        3: ["🐖","🐓","🐑","🦒","🦖","🦄","🐿","🦆","🐫"],
+        4: ["🚗","🚕","🚜","🏎","🚓","🚒","🚛","🚑","🚎"],
+        5: ["🇨🇦","🇧🇪","🇬🇧","🇺🇸","🇹🇷","🇪🇺","🇦🇺","🇫🇷","🇯🇵"],
+    ]
     
+    var emojiChoices = [String]()
     var emoji = [Int: String]()
+    
+    func setTheme() {
+        let theme = Int(arc4random_uniform(UInt32(emojiThemes.keys.count)))
+        if let selectedTheme = emojiThemes[theme] {
+            emojiChoices = selectedTheme
+        } else {
+            print ("Failed")
+        }
+    }
     
     func emoji(for card: Card) -> String {
         if emoji[card.identifier] == nil, emojiChoices.count > 0 {

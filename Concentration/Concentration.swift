@@ -11,17 +11,27 @@ import Foundation
 class Concentration {
     
     var cards = [Card]()
-    var indexOfOneAndOnlyFaceUpCard: Int?
+    
     var score = 0
+    var flipCount = 0
+    var indexOfOneAndOnlyFaceUpCard: Int?
+    var previouslyFlippedCard = [Int]()
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
+                previouslyFlippedCard.append(matchIndex)
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     score += 2
+                } else if previouslyFlippedCard.contains(cards[matchIndex].identifier) {
+                    if score == 0 {
+                        score = 0
+                    } else {
+                        score -= 1
+                    }
                 }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = nil    // not one and only ...
@@ -34,14 +44,20 @@ class Concentration {
                 indexOfOneAndOnlyFaceUpCard = index
             }
         }
+        flipCount += 1
     }
     
     init(numberOfPairsOfCards: Int) {
-        for _ in 1...numberOfPairsOfCards {
+        var standardDeck = [Card]()
+        for _ in 0..<numberOfPairsOfCards {
             let card = Card()
-            cards += [card, card]
+            standardDeck += [card, card]
         }
-        //    TODO: Shuffle the cards
+        while standardDeck.count > 0 {
+            let randomIndex = Int(arc4random_uniform(UInt32(standardDeck.count)))
+            let randomCard = standardDeck.remove(at: randomIndex)
+            cards.append(randomCard)
+        }
     }
     
 }
