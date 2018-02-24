@@ -46,11 +46,11 @@ struct Concentration {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
                 previouslyFlippedCard.append(matchIndex)
-                if cards[matchIndex].identifier == cards[index].identifier {
+                if cards[matchIndex] == cards[index]{
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     score += 2
-                } else if previouslyFlippedCard.contains(cards[matchIndex].identifier) {
+                } else if previouslyFlippedCard.contains(matchIndex){
                     if score == 0 {
                         score = 0
                     } else {
