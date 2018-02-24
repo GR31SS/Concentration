@@ -17,15 +17,33 @@ class ViewController: UIViewController
             return (cardButtons.count + 1) / 2
     }
     
-    private(set) var flipCount = 0 { didSet { flipCountLabel.text = "Flips: \(flipCount)" } }
+    private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
     
-    private(set) var scoreCount = 0 {didSet {scoreLabel.text = "Score:  \(scoreCount)" } }
+    private func updateFlipCountLabel() {
+        let attributes: [NSAttributedStringKey:Any] = [
+            .strokeWidth : 5.0,
+            .strokeColor : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+        ]
+        let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
+        flipCountLabel.attributedText = attributedString
+    }
+    
+    private(set) var scoreCount = 0 { didSet { updateScoreLabel() } }
+    
+    private func updateScoreLabel() {
+        let attributes: [NSAttributedStringKey:Any] = [
+            .strokeWidth : 5.0,
+            .strokeColor : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+        ]
+        let attributedString = NSAttributedString(string: "Score:  \(scoreCount)", attributes: attributes)
+        scoreLabel.attributedText = attributedString
+    }
 
     @IBOutlet private var cardButtons: [UIButton]!
     
-    @IBOutlet private weak var flipCountLabel: UILabel!
+    @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
     
-    @IBOutlet private weak var scoreLabel: UILabel!
+    @IBOutlet private weak var scoreLabel: UILabel! { didSet { updateScoreLabel() } }
     
     @IBAction private func newGameButton(_ sender: UIButton) {
         self.refreshView()
